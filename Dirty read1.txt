@@ -1,0 +1,73 @@
+MariaDB [(none)]> create database shop1;
+Query OK, 1 row affected (0.015 sec)
+
+MariaDB [(none)]> use shop1;
+Database changed
+MariaDB [shop1]> create table mobile(mibile_id varchar(50),name varchar(50),price int);
+Query OK, 0 rows affected (0.021 sec)
+
+MariaDB [shop1]> insert into mobile values('11A','Samsung',5000);
+Query OK, 1 row affected (0.027 sec)
+
+MariaDB [shop1]> select * from mobile;
++-----------+---------+-------+
+| mibile_id | name    | price |
++-----------+---------+-------+
+| 11A       | Samsung |  5000 |
++-----------+---------+-------+
+1 row in set (0.014 sec)
+
+MariaDB [shop1]> begin transaction
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'transaction' at line 1
+MariaDB [shop1]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [shop1]> update mobile set price=price-500 where name='Samsung';
+Query OK, 1 row affected (0.019 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [shop1]> select sleep(120);
++------------+
+| sleep(120) |
++------------+
+|          0 |
++------------+
+1 row in set (2 min 0.025 sec)
+
+MariaDB [shop1]> rollback;
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [shop1]> select * from mobile;
++-----------+---------+-------+
+| mibile_id | name    | price |
++-----------+---------+-------+
+| 11A       | Samsung |  5000 |
++-----------+---------+-------+
+1 row in set (0.001 sec)
+
+MariaDB [shop1]> commit;
+Query OK, 0 rows affected (0.000 sec)
+
+
+
+//second terminal
+
+MariaDB [(none)]> use shop1;
+Database changed
+MariaDB [shop1]> set transaction isolation level read uncommitted;
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [shop1]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [shop1]> select * from mobile;
++-----------+---------+-------+
+| mibile_id | name    | price |
++-----------+---------+-------+
+| 11A       | Samsung |  4500 |
++-----------+---------+-------+
+1 row in set (0.001 sec)
+
+MariaDB [shop1]> commit;
+Query OK, 0 rows affected (0.000 sec)
